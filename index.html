@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>SOXHIBB BDAY</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="shape shape-one"></div>
+  <div class="shape shape-two"></div>
+  <div class="shape shape-three"></div>
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Passcode Screen -->
+    <div class="screen active" id="passcode-screen">
+      <input type="password" class="passcode-input" id="passcode-input" placeholder="Enter Passcode" maxlength="6" />
+      <div class="hint-prompt" id="hint-prompt" style="display: none;">What is your unique aura farming username?</div>
+      <div class="error-message" id="error-message" style="display: none;">Incorrect passcode!</div>
+    </div>
+    <!-- Dialogue Screen -->
+    <div class="screen" id="dialogue-screen">
+      <div class="dialogue-container">
+        <div class="dialogue-image-container">
+          <img src="ARGH.jpg" alt="Sohaib Avatar">
+        </div>
+        <div class="dialogue-text-container">
+          <div class="dialogue-text" id="dialogue-text"></div>
+          <div class="dialogue-options" id="dialogue-options"></div>
+          <div class="dialogue-response-container" id="dialogue-response-container"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Quiz Screen -->
+    <div class="screen" id="quiz-screen">
+      <div class="quiz-container">
+        <div class="quiz-question" id="question-text"></div>
+        <ul class="quiz-options" id="options-list"></ul>
+        <div class="error-comment" id="error-comment"></div>
+      </div>
+    </div>
+    <!-- Final Screen -->
+    <div class="screen" id="final-screen">
+      <div class="final-container">
+        <p class="final-message">
+I DONT EVEN KNOW WHERE TO STARTTTTTT its actually crazy to think weve known each other for less than a year because it feels like ive known you forEVER and ive made more progress with you, more real growth, and felt more understood and understanding with you than i have with people ive know for literal years and thats something ill never take for granted and yous two came into my life unexpectedly BUT NOW I COULDNT IMAGINE IT WITHOUT YOUS. your genuinely one of the best people ive met and youve been there for me in moment where i didnt even gottaaaa explain myself YOU JUST GOT IT AND IT JUST MEAN SO MUCH MORE THAN I CAN PUT INTO WORDS.
+
+i dont regret meeting you fro a second TWINN and im happy i did your someone ill always back and be there for because i know just generally even with life and family and people youve just been constantly mistreated, misunderstood and overlooked by people who never took the time to see the real you AND IM HAPPY I DID because im telling you. theres so much depth to you ANDNNNDDD SO MUCH CHARACTER AY AND SO MUCH SKIBIDI STRENGTH and your one of the rare pepol who actually feels and actually thinks and actually cares so dont ever let ANYONEEEEE ELSE MAKE YOU THINK OTHERWISE HENCE WHY I SAY DONT GIVE YOUR ALL TO PEOPLE WHO DONT DESERVE IT. 
+
+ive seen you grow these past months even if you didn't realise it yourself and im so proud of you GENUINELY because the way you've been pushing through with life and dealing with your stuff and getting better as a person even in silence IT MIGHT BE SUBTLE BUT THERE IS DFEFINELY CHANGFE 
+
+BUT YAEAHH i hope today reminds you just how loved you are by EVERYONEEEEE WHO ACTUALLY CARES ABOUT YOU just anyone lucky to know you properly and you deserve a bday that feels light joyful and peaceful and just one that gives you a break from overthinking and lets you BREATHEEEEEEEEEEEEEEEEEEE
+
+and i beg you let me convince your mum over the phone to let you come arndale for your birthday ill even say ILL PAY FOR EVERYTHING AUNTI PLEASE I WILL SEND PHOTOS AND EVERYTHING PERSONALLY I JUST WANT HIM TO HAVE A REALLY NICE DAY FOR HIS BIRTHDAY ILL EVEN SHOW WHOS COMING AND WHAT WE DO ECT just trust my persuation skills 
+
+AAAAAAAANYWAYS HAPPY BIRTHDAY SOHXAIBBBBB LOVE YAA TWIN AND THANK YOU FOR EVERYTHING I WISH YOU ALL THE BEST I AM MOST LIKELY FAST ASLEEP HOPEFULLY NOT BUT YAH HAPPY BRITHDYAYYYAYAYAYAYAYYAYYAY
+        </p>
+        <div class="spotify-embed">
+          <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1DYRRZ5rSlc1PopnB7azLZ?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    /***** iOS Viewport Fix *****/
+    function setVh() {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    setVh();
+    window.addEventListener('resize', setVh);
+
+    /***** TYPEWRITER EFFECT *****/
+    function typeWriter(text, element, delay = 50, callback) {
+      if (element.typingInterval) clearInterval(element.typingInterval);
+      element.textContent = "";
+      let index = 0;
+      element.typingInterval = setInterval(() => {
+        if (index < text.length) {
+          element.textContent += text.charAt(index);
+          index++;
+        } else {
+          clearInterval(element.typingInterval);
+          element.typingInterval = null;
+          if (callback) callback();
+        }
+      }, delay);
+    }
+
+    function sayDialogue(text, element, delay = 50, callback) {
+      typeWriter(text, element, delay, callback);
+    }
+
+    /***** PASSCODE SCREEN LOGIC *****/
+    const passcodeInput = document.getElementById("passcode-input");
+    const passcodeScreen = document.getElementById("passcode-screen");
+    const dialogueScreen = document.getElementById("dialogue-screen");
+    const hintPrompt = document.getElementById("hint-prompt");
+    const errorMessage = document.getElementById("error-message");
+    let incorrectAttempts = 0;
+
+    passcodeInput.addEventListener("input", () => {
+      if (passcodeInput.value === "sohxib") {
+        // Clear the input so the password doesn't linger
+        passcodeInput.value = "";
+        passcodeScreen.classList.add("fade-out");
+        setTimeout(() => {
+          passcodeScreen.classList.remove("active", "fade-out");
+          dialogueScreen.classList.add("active", "fade-in");
+          startInteractiveDialogue();
+        }, 500);
+      } else if (passcodeInput.value.length > 6) {
+        errorMessage.textContent = "Passcode cannot exceed 6 characters!";
+        errorMessage.style.display = "block";
+        setTimeout(() => {
+          errorMessage.style.display = "none";
+        }, 1500);
+        passcodeInput.value = ""; // Clear invalid input
+      } else if (passcodeInput.value.length === 6) {
+        incorrectAttempts++;
+        if (incorrectAttempts === 1) {
+          hintPrompt.style.display = "block";
+        }
+        errorMessage.textContent = "Incorrect passcode!";
+        errorMessage.style.display = "block";
+        setTimeout(() => {
+          errorMessage.style.display = "none";
+        }, 1500);
+        passcodeInput.value = ""; // Clear invalid input
+      }
+    });
+
+    /***** INTERACTIVE DIALOGUE *****/
+    function startInteractiveDialogue() {
+      const dialogueTextElement = document.getElementById('dialogue-text');
+      const dialogueOptionsContainer = document.getElementById('dialogue-options');
+      const dialogueResponseContainer = document.getElementById('dialogue-response-container');
+
+      sayDialogue('HE-HEEY-HEY! YES. THIS IS ME WELL. YOU', dialogueTextElement, 30, () => {
+        setTimeout(() => {
+          const options = [
+            {
+              text: "erm.",
+              response: 'Stupid little puss baby piss cunt, do these questions NOWWWWWWWW'
+            },
+            {
+              text: "H-H-HEY!",
+              response: 'Well, well, someone woke up on the wrong side of the bed.'
+            },
+            {
+              text: "ARGHGHHHHHHHH",
+              response: 'Calm down, drama queen. Let\'s get this over with.'
+            }
+          ];
+
+          dialogueOptionsContainer.innerHTML = "";
+          options.forEach((option) => {
+            const btn = document.createElement("div");
+            btn.className = "dialogue-option";
+            btn.textContent = option.text;
+            btn.addEventListener("click", () => {
+              const userResponse = document.createElement("div");
+              userResponse.textContent = `Me: ${option.text}`;
+              userResponse.classList.add("dialogue-response", "user-message");
+              dialogueResponseContainer.appendChild(userResponse);
+              dialogueOptionsContainer.childNodes.forEach((child) => {
+                child.classList.add("fade-out");
+              });
+              setTimeout(() => {
+                dialogueOptionsContainer.innerHTML = "";
+              }, 600);
+
+              sayDialogue(option.response, dialogueTextElement, 50, () => {
+                setTimeout(() => {
+                  const nextOptions = [
+                    {
+                      text: "die dyke bitch",
+                      response: 'EXCUSE ME... I GET THE LAST LINE HERE. MAUHAHAHAHAH'
+                    },
+                    {
+                      text: "ok",
+                      response: 'DRYYYYYYYYYY... I GET THE LAST LINE HERE. MAUHAHAHAHAH'
+                    },
+                    {
+                      text: "OH",
+                      response: 'well... I GET THE LAST LINE HERE. MAUHAHAHAHAH'
+                    }
+                  ];
+                  dialogueOptionsContainer.innerHTML = "";
+                  nextOptions.forEach((nextOption) => {
+                    const btn = document.createElement("div");
+                    btn.className = "dialogue-option";
+                    btn.textContent = nextOption.text;
+                    btn.addEventListener("click", () => {
+                      const userResponse = document.createElement("div");
+                      userResponse.textContent = `Me: ${nextOption.text}`;
+                      userResponse.classList.add("dialogue-response", "user-message");
+                      dialogueResponseContainer.appendChild(userResponse);
+                      dialogueOptionsContainer.childNodes.forEach((child) => {
+                        child.classList.add("fade-out");
+                      });
+                      setTimeout(() => {
+                        dialogueOptionsContainer.innerHTML = "";
+                      }, 600);
+
+                      sayDialogue(nextOption.response, dialogueTextElement, 50, () => {
+                        setTimeout(() => {
+                          dialogueScreen.classList.add("fade-out");
+                          setTimeout(() => {
+                            dialogueScreen.classList.remove("active", "fade-out");
+                            document.getElementById("quiz-screen").classList.add("active", "fade-in");
+                            loadQuiz();
+                          }, 600);
+                        }, 2000);
+                      });
+                    });
+                    dialogueOptionsContainer.appendChild(btn);
+                  });
+                }, 2000);
+              });
+            });
+            dialogueOptionsContainer.appendChild(btn);
+          });
+        }, 2000);
+      });
+    }
+
+    /***** QUIZ SECTION *****/
+    const questions = [
+      {
+        question: "What is two women who do meowmeow with each other?",
+        options: ["Dyke", "Meow meow eaters", "Lesbians", "Friends"],
+        correctAnswer: "Dyke"
+      },
+      {
+        question: "What is Soxhibb's ON REPEAT song?",
+        options: ["Paranoia - The Marías", "Seinna - The Marías", "The Blackest Day - Lana Del Ray", "Back To Me - The Marías"],
+        correctAnswer: "Seinna - The Marías"
+      },
+      {
+        question: "How long do you think you'll be friends with Azhan and Hassan?",
+        options: ["FOREVER", "MAYBE FOREVER", "I THINK FOREVER!"],
+        correctAnswer: ["FOREVER", "MAYBE FOREVER", "I THINK FOREVER!"]
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    function loadQuiz() {
+      currentQuestionIndex = 0;
+      displayQuestion();
+    }
+
+    function displayQuestion() {
+      const questionText = document.getElementById("question-text");
+      const optionsList = document.getElementById("options-list");
+      const errorComment = document.getElementById("error-comment");
+      errorComment.style.display = "none";
+      typeWriter(questions[currentQuestionIndex].question, questionText, 50);
+      optionsList.innerHTML = "";
+      questions[currentQuestionIndex].options.forEach((option) => {
+        const li = document.createElement("li");
+        li.textContent = option;
+        li.addEventListener("click", () => checkAnswer(option, li));
+        optionsList.appendChild(li);
+      });
+    }
+
+    function checkAnswer(answer, li) {
+      const errorComment = document.getElementById("error-comment");
+      if (
+        Array.isArray(questions[currentQuestionIndex].correctAnswer)
+          ? questions[currentQuestionIndex].correctAnswer.includes(answer)
+          : answer === questions[currentQuestionIndex].correctAnswer
+      ) {
+        li.classList.add("correct");
+        if (currentQuestionIndex === 0) {
+          // Remove previous response after first correct answer
+          const dialogueResponseContainer = document.getElementById('dialogue-response-container');
+          dialogueResponseContainer.innerHTML = "";
+        }
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+          setTimeout(displayQuestion, 1000);
+        } else {
+          setTimeout(() => {
+            document.getElementById("quiz-screen").classList.add("fade-out");
+            setTimeout(() => {
+              document.getElementById("quiz-screen").classList.remove("active", "fade-out");
+              document.getElementById("dialogue-screen").classList.add("active", "fade-in");
+              finalDialogue();
+            }, 600);
+          }, 1000);
+        }
+      } else {
+        li.classList.add("incorrect");
+        showErrorComment(errorComment);
+        setTimeout(() => {
+          li.classList.remove("incorrect");
+        }, 1500);
+      }
+    }
+
+    function showErrorComment(container) {
+      container.textContent = "Incorrect!";
+      container.style.display = "block";
+      setTimeout(() => {
+        container.style.display = "none";
+      }, 1500);
+    }
+
+    function finalDialogue() {
+      const dialogueTextElement = document.getElementById('dialogue-text');
+      const dialogueOptionsContainer = document.getElementById('dialogue-options');
+      const dialogueResponseContainer = document.getElementById('dialogue-response-container');
+
+      sayDialogue('OOP. YOU GOT THEM ALL RIGHT', dialogueTextElement, 50, () => {
+        setTimeout(() => {
+          sayDialogue('NOW FOR THE MAIN MESSAGE the aiznm over here says he apologises for rushing the website it takes a LONG LONG LONG TIME THAN HE ANTICIPATED BUT HE PULLED THROUGH ', dialogueTextElement, 50, () => {
+            setTimeout(() => {
+              dialogueScreen.classList.add("fade-out");
+              setTimeout(() => {
+                dialogueScreen.classList.remove("active", "fade-out");
+                document.getElementById("final-screen").classList.add("active", "fade-in");
+                finalQuizOptions();
+              }, 600);
+            }, 2000);
+          });
+        }, 2000);
+      });
+    }
+
+    function finalQuizOptions() {
+      const finalDialogueOptionsContainer = document.getElementById('final-dialogue-options');
+      const options = [
+        {
+          text: "YEAH I KNOW I DID YOU DYKE FAGGOT BITCH",
+          response: 'NOOOWWW YOU MADE IT THIS FAR, FINAL PAGEE'
+        },
+        {
+          text: "HELP MEEEEE",
+          response: 'NOOOWWW YOU MADE IT THIS FAR, FINAL PAGEE'
+        },
+        {
+          text: "OKOAKAIAAYAYYA",
+          response: 'NOOOWWW YOU MADE IT THIS FAR, FINAL PAGEE'
+        }
+      ];
+
+      finalDialogueOptionsContainer.innerHTML = "";
+      options.forEach((option) => {
+        const btn = document.createElement("div");
+        btn.className = "dialogue-option";
+        btn.textContent = option.text;
+        btn.addEventListener("click", () => {
+          const userResponse = document.createElement("div");
+          userResponse.textContent = `Me: ${option.text}`;
+          userResponse.classList.add("dialogue-response", "user-message");
+          dialogueResponseContainer.appendChild(userResponse);
+          finalDialogueOptionsContainer.childNodes.forEach((child) => {
+            child.classList.add("fade-out");
+          });
+          setTimeout(() => {
+            finalDialogueOptionsContainer.innerHTML = "";
+          }, 600);
+
+          sayDialogue(option.response, dialogueTextElement, 50, () => {
+            setTimeout(() => {
+              document.getElementById("final-screen").classList.add("fade-out");
+              setTimeout(() => {
+                document.getElementById("final-screen").classList.remove("active", "fade-out");
+                // Final screen logic here
+              }, 600);
+            }, 2000);
+          });
+        });
+        finalDialogueOptionsContainer.appendChild(btn);
+      });
+    }
+  </script>
+</body>
+</html>
